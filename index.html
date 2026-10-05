@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Portal</title>
+  <meta name="description" content="One home for your games. Carry up to five characters from one game into another." />
+  <meta name="theme-color" content="#14110f" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/hub.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-kanji" aria-hidden="true">門</span><span class="brand-name">Portal</span></div>
+    <button class="player" id="player-btn" type="button" aria-label="Change player name">
+      <span class="player-label">Player</span><span class="player-name" id="player-name">—</span>
+    </button>
+  </header>
+
+  <main class="hub">
+    <section class="block" aria-labelledby="games-h">
+      <div class="block-head">
+        <h2 id="games-h">Games</h2>
+        <p class="hint">Pick a game, choose up to 5 characters to bring, and step through.</p>
+      </div>
+      <div class="games" id="games"></div>
+    </section>
+
+    <section class="block" aria-labelledby="vault-h">
+      <div class="block-head">
+        <h2 id="vault-h">Vault <span class="count" id="vault-count">0</span></h2>
+        <div class="block-tools">
+          <button class="btn" id="paste-code-btn" type="button">Paste Portal Code</button>
+        </div>
+      </div>
+      <div class="filters" id="filters" role="radiogroup" aria-label="Filter vault by game"></div>
+      <div class="vault" id="vault"></div>
+      <p class="empty" id="vault-empty" hidden>
+        Your vault is empty. Open a game, go to <b>Settings → Portal</b> and send characters here,
+        or paste a Portal Code.
+      </p>
+    </section>
+  </main>
+
+  <!-- Party picker -->
+  <dialog class="sheet" id="party-dialog" aria-labelledby="party-title">
+    <form method="dialog" class="sheet-inner">
+      <header class="sheet-head">
+        <div>
+          <h3 id="party-title">Choose your party</h3>
+          <p class="hint" id="party-sub">Up to 5 characters travel with you. They're copies — they stay in your vault.</p>
+        </div>
+        <span class="party-count" id="party-count">0 / 5</span>
+      </header>
+      <div class="vault vault-pick" id="party-grid"></div>
+      <p class="empty" id="party-empty" hidden>No characters in the vault yet. You can still enter and send some back from the game.</p>
+      <footer class="sheet-foot">
+        <button class="btn" value="cancel" type="submit">Cancel</button>
+        <button class="btn is-primary" id="party-go" type="button">Enter</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Paste code -->
+  <dialog class="sheet sheet-small" id="code-dialog" aria-labelledby="code-title">
+    <form method="dialog" class="sheet-inner">
+      <h3 id="code-title">Paste Portal Code</h3>
+      <p class="hint">Codes start with <code>PRTL1.</code> and carry up to 5 characters.</p>
+      <textarea id="code-input" rows="4" spellcheck="false" autocomplete="off" placeholder="PRTL1.…"></textarea>
+      <p class="error" id="code-error" role="alert"></p>
+      <footer class="sheet-foot">
+        <button class="btn" value="cancel" type="submit">Cancel</button>
+        <button class="btn is-primary" id="code-go" type="button">Add to Vault</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- In-game view -->
+  <section class="play" id="play" hidden aria-label="Game">
+    <div class="play-bar">
+      <button class="btn btn-back" id="leave-btn" type="button">‹ Portal</button>
+      <span class="play-title" id="play-title"></span>
+      <span class="play-party" id="play-party" aria-label="Party"></span>
+      <span class="play-status" id="play-status">Connecting…</span>
+    </div>
+    <iframe id="play-frame" title="Game" allow="autoplay; fullscreen; clipboard-write" referrerpolicy="same-origin"></iframe>
+  </section>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="sdk/portal-sdk.js"></script>
+  <script src="js/vault.js"></script>
+  <script src="js/bridge.js"></script>
+  <script src="js/hub.js"></script>
+</body>
+</html>

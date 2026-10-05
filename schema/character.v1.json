@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "portal/character.v1.json",
+  "title": "Portal character card (v1)",
+  "description": "A portable copy of a character. Each game turns it into its own unit with an adapter. sdk/portal-sdk.js validateCard() is the reference implementation.",
+  "type": "object",
+  "required": ["schema", "id", "sourceGame", "baseId", "name", "element", "rarity", "level", "maxLevel", "stats", "art"],
+  "properties": {
+    "schema": { "const": 1 },
+    "id": { "type": "string", "description": "<sourceGame>:<baseId>", "pattern": "^[a-z0-9-]+:[A-Za-z0-9_.-]+$" },
+    "sourceGame": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "Game id from games.json that owns this character" },
+    "baseId": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$", "description": "Character id inside the source game" },
+    "name": { "type": "string", "maxLength": 60 },
+    "title": { "type": "string", "maxLength": 60 },
+    "franchise": { "type": "string", "maxLength": 30 },
+    "element": { "enum": ["Body", "Skill", "Heart", "Bravery", "Wisdom"] },
+    "rarity": { "type": "integer", "minimum": 1, "maximum": 7 },
+    "level": { "type": "integer", "minimum": 1 },
+    "maxLevel": { "type": "integer", "minimum": 1, "maximum": 999 },
+    "stats": {
+      "type": "object",
+      "description": "Max stats normalised to 0-1 against PortalSDK.STAT_CAPS (hp 75000, atk 10000, speed 550)",
+      "required": ["hp", "atk", "speed"],
+      "properties": {
+        "hp": { "type": "number", "minimum": 0, "maximum": 1 },
+        "atk": { "type": "number", "minimum": 0, "maximum": 1 },
+        "speed": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "art": {
+      "type": "object",
+      "description": "Absolute http(s) URLs, or empty strings",
+      "properties": { "portrait": { "type": "string" }, "full": { "type": "string" } }
+    }
+  }
+}

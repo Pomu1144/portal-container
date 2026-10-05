@@ -1,0 +1,22 @@
+[
+  {
+    "id": "nxbnvnb",
+    "name": "Ultimate Ninja Legends",
+    "tagline": "Naruto · Blazing-style team battles",
+    "kanji": "忍",
+    "url": "../NXBNVNB/index.html",
+    "franchise": "naruto",
+    "maxParty": 5,
+    "accent": "#f3b21c"
+  },
+  {
+    "id": "jjk-net0",
+    "name": "Jujutsu Kaisen: Cursed Clash",
+    "tagline": "Jujutsu Kaisen · Domain battles",
+    "kanji": "呪",
+    "url": "../JJK-net0/index.html",
+    "franchise": "jjk",
+    "maxParty": 5,
+    "accent": "#7c5cff"
+  }
+]
