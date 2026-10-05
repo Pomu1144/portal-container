@@ -1,0 +1,58 @@
+[
+  {
+    "id": "nxbnvnb",
+    "name": "Ultimate Ninja Legends",
+    "tagline": "Naruto · Blazing-style team battles",
+    "kanji": "忍",
+    "url": "../NXBNVNB/index.html",
+    "franchise": "naruto",
+    "maxParty": 5,
+    "accent": "#f3b21c",
+    "currencies": {
+      "coins": {
+        "name": "Ryo",
+        "short": "Ryo",
+        "base": 0.012,
+        "vol": 0.08,
+        "spread": 0.01,
+        "glyph": "両"
+      },
+      "premium": {
+        "name": "Ninja Pearls",
+        "short": "Pearls",
+        "base": 1.2,
+        "vol": 0.12,
+        "spread": 0.02,
+        "glyph": "珠"
+      }
+    }
+  },
+  {
+    "id": "jjk-net0",
+    "name": "Jujutsu Kaisen: Cursed Clash",
+    "tagline": "Jujutsu Kaisen · Domain battles",
+    "kanji": "呪",
+    "url": "../JJK-net0/index.html",
+    "franchise": "jjk",
+    "maxParty": 5,
+    "accent": "#7c5cff",
+    "currencies": {
+      "coins": {
+        "name": "JP",
+        "short": "JP",
+        "base": 0.01,
+        "vol": 0.08,
+        "spread": 0.01,
+        "glyph": "呪"
+      },
+      "premium": {
+        "name": "Cubes",
+        "short": "Cubes",
+        "base": 0.0167,
+        "vol": 0.12,
+        "spread": 0.02,
+        "glyph": "立"
+      }
+    }
+  }
+]
