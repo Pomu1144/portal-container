@@ -1,4 +1,4 @@
-/* js/vault.js — the character vault, the wallet, and the player profile.
+/* js/vault.js — the character vault and the player profile.
  * The vault is the hub's source of truth for which characters the player
  * owns across every game. One card per character (id = sourceGame:baseId);
  * level and rarity only ever go up. Stored in localStorage under portal_*.
@@ -11,18 +11,13 @@
   const listeners = new Set();
 
   function blank() {
-    return { schema: SCHEMA, player: { name: '' }, cards: {}, wallet: { coins: 0, premium: 0 }, ledger: [] };
+    return { schema: SCHEMA, player: { name: '' }, cards: {} };
   }
 
   function load() {
     try {
       const raw = JSON.parse(localStorage.getItem(KEY));
-      if (raw && raw.schema === SCHEMA && raw.cards && typeof raw.cards === 'object') {
-        // Saves from before the wallet existed.
-        raw.wallet = Object.assign({ coins: 0, premium: 0 }, raw.wallet);
-        raw.ledger = Array.isArray(raw.ledger) ? raw.ledger : [];
-        return raw;
-      }
+      if (raw && raw.schema === SCHEMA && raw.cards && typeof raw.cards === 'object') return raw;
     } catch (_) { /* fall through */ }
     return blank();
   }
@@ -79,33 +74,6 @@
     save();
   }
 
-  /* ---------- wallet ---------- */
-
-  const LEDGER_MAX = 500;
-
-  /**
-   * Apply a transfer once. key = '<gameId>:<txId>'; a key already in the
-   * ledger is answered with its original result and changes nothing.
-   * type 'deposit' adds `units` to the wallet, 'withdraw' removes them.
-   * Returns { ok, error?, replay? }.
-   */
-  function transfer(key, type, currency, units, meta) {
-    const done = state.ledger.find((t) => t.key === key);
-    if (done) return { ok: done.ok, error: done.error, replay: true };
-    if (!(currency in state.wallet) || !(units > 0)) return { ok: false, error: 'Bad transfer' };
-    let result;
-    if (type === 'withdraw' && state.wallet[currency] < units) {
-      result = { ok: false, error: 'Not enough ' + currency + ' in the Portal wallet' };
-    } else {
-      state.wallet[currency] += type === 'deposit' ? units : -units;
-      result = { ok: true };
-    }
-    state.ledger.unshift(Object.assign({ key, type, currency, units, at: Date.now(), ok: result.ok, error: result.error }, meta));
-    state.ledger.length = Math.min(state.ledger.length, LEDGER_MAX);
-    save();
-    return result;
-  }
-
   global.Vault = {
     all: () => Object.values(state.cards).sort((a, b) => b.rarity - a.rarity || b.level - a.level || a.name.localeCompare(b.name)),
     get: (id) => state.cards[id] || null,
@@ -116,8 +84,5 @@
     playerName: () => state.player.name || '',
     setPlayerName: (n) => { state.player.name = String(n || '').trim().slice(0, 24); save(); },
     onChange: (fn) => listeners.add(fn),
-    wallet: () => Object.assign({}, state.wallet),
-    ledger: () => state.ledger.slice(),
-    transfer,
   };
 })(window);

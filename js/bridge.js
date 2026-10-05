@@ -4,8 +4,9 @@
  *   - a game only receives the party the player picked (max 5 cards)
  *   - updates are accepted only for cards in that party; level/rarity only rise
  *   - a game may only grant characters it owns (card.sourceGame === game id)
- *   - deposits/withdrawals are applied once per txId and converted with the
- *     game's rates from games.json (game units per Portal unit, default 1)
+ *   - a game deposits and withdraws only its own two currencies, held at the
+ *     Portal as '<game>:coins' and '<game>:premium' (see js/bank.js); each
+ *     txId is applied once
  */
 (function (global) {
   'use strict';
@@ -14,10 +15,9 @@
   const MAX_GRANTS_PER_TRIP = 50;
   let trip = null; // { game, origin, frame, party, grants, onEvent }
 
-  function ratesFor(game) {
-    const out = {};
-    for (const c of SDK.CURRENCIES) out[c] = Number(game.rates && game.rates[c]) > 0 ? Number(game.rates[c]) : 1;
-    return out;
+  // This game's two currencies as held at the Portal.
+  function walletFor(game) {
+    return { coins: Bank.bal(game.id + ':coins'), premium: Bank.bal(game.id + ':premium') };
   }
 
   function gameOrigin(game) {
@@ -43,8 +43,8 @@
           type: 'welcome',
           player: { name: Vault.playerName() || 'Player' },
           party: { id: trip.party.id, max: SDK.MAX_PARTY, cards: trip.party.cards },
-          wallet: Vault.wallet(),
-          rates: ratesFor(trip.game),
+          wallet: walletFor(trip.game),
+          rates: { coins: 1, premium: 1 },
         });
         trip.onEvent('connected');
         break;
@@ -74,13 +74,10 @@
       case 'deposit':
       case 'withdraw': {
         try { SDK.checkTransfer(m.currency, m.amount, m.txId); } catch (err) { return ack(false, err.message); }
-        const rate = ratesFor(trip.game)[m.currency];
-        // Game units → Portal units, never in the player's favour.
-        const units = m.type === 'deposit' ? Math.floor(m.amount / rate) : Math.ceil(m.amount / rate);
-        if (units < 1) return ack(false, 'Amount is below one Portal ' + m.currency);
-        const r = Vault.transfer(trip.game.id + ':' + m.txId, m.type, m.currency, units, { gameId: trip.game.id, amount: m.amount });
-        reply({ type: 'ack', reqId: m.reqId, ok: r.ok, error: r.error, wallet: Vault.wallet() });
-        if (r.ok && !r.replay) trip.onEvent(m.type, { currency: m.currency, units });
+        const id = trip.game.id + ':' + m.currency;
+        const r = Bank.transfer(trip.game.id + ':' + m.txId, m.type, id, m.amount, { gameId: trip.game.id });
+        reply({ type: 'ack', reqId: m.reqId, ok: r.ok, error: r.error, wallet: walletFor(trip.game) });
+        if (r.ok && !r.replay) trip.onEvent(m.type, { id, amount: m.amount });
         return;
       }
 

@@ -13,9 +13,14 @@ One home for your games. The Portal holds a **character vault** and launches eac
 portal-container/            (this repo — the hub)
   index.html                 launcher: games, vault, party picker, in-game view
   games.json                 game list: id, name, url, maxParty
-  js/vault.js                the vault (localStorage portal_vault_v1)
+  js/vault.js                the character vault (localStorage portal_vault_v1)
+  js/market.js               price engine for currencies and stocks
+  js/bank.js                 balances, conversions, trades, orders, ledger (portal_bank_v1)
+  js/charts.js               SVG price charts
   js/bridge.js               hub side of the protocol
-  js/hub.js                  launcher UI
+  js/hub.js                  the app: Play, Vault, Exchange, Markets, Activity
+  data/stocks.json           the fictional companies
+  assets/ART_PROMPTS.md      image prompts for every art slot
   sdk/portal-sdk.js          the file every game includes (canonical copy)
   schema/character.v1.json   the portable character card
 ```
@@ -26,24 +31,31 @@ Each game stays its own repo and site. The hub opens a game in an iframe and the
 2. The game turns each card into its own unit with an **adapter**: a card from its own game adds that unit; a card from another game becomes a playable *guest*.
 3. The game may `update` a party card (level/rarity only go up) or `grant` one of **its own** characters into the vault.
 
-4. The game may `deposit` currency into the Portal wallet or `withdraw` from it.
+4. The game may `deposit` its currencies at the Portal or `withdraw` them.
 
 The hub only reads messages from the open game's iframe and origin, rejects updates for cards outside the party, and refuses grants of characters a game does not own.
 
 Without the hub, characters can still travel as a **Portal Code** (`PRTL1.…`, up to 5 cards): copy it from one game's *Settings → Portal* and paste it into another game or into the hub.
 
-## Currency
+## Currency and the Portal Exchange
 
-The hub keeps one wallet with two currencies. Each game maps its own money onto them:
+Each game's two currencies are held at the Portal as their own assets:
 
-| Portal | NXBNVNB | JJK-net0 |
+| Asset | NXBNVNB | JJK-net0 |
 |---|---|---|
-| `coins` ◎ | Ryo | the game's soft currency |
-| `premium` ◆ | Ninja Pearls | the game's premium currency |
+| `<game>:coins` | Ryo | Yen |
+| `<game>:premium` | Ninja Pearls | Cursed Cubes |
 
-Coins only go to coins and premium only to premium. `games.json` sets each game's `rates` (game units per Portal unit, default 1 : 1), and conversion always rounds against the player. Money only moves while a game runs inside the hub; Portal Codes never carry currency, since a code can be pasted twice.
+A game deposits and withdraws only its own two currencies (`deposit` / `withdraw` in the SDK). Moving value between games happens on the hub's **Exchange**, priced in **Portal Credits (◈)**:
 
-Every transfer has a `txId`. The hub records it in a ledger and applies each id once, so a game that lost the hub's answer can safely retry with the same id. Games save a transfer as pending before sending it and retry pending transfers on the next connect. The hub page lists recent transfers under **Wallet**.
+- **Floating exchange rates.** Every currency has a price in credits that moves minute by minute, so 1 Ryo might buy 1.14 Yen today and 1.26 next week. **Convert** swaps any currency for another (or for credits) in one step.
+- **Stock market.** Twelve fictional companies from both worlds (`data/stocks.json`) with their own volatility, a shared market factor and occasional news events that move prices. Buy shares with credits, sell them later, convert the credits into whatever currency a game needs.
+- **Target orders.** Buy or sell at a price you choose. The cost (or the shares) is set aside, the order fills automatically if the price reaches the target, even while the hub is closed, and expires after 7 days returning what was set aside.
+- **Activity** lists holdings with profit/loss, open and closed orders, and every transfer, trade and order.
+
+How prices work (`js/market.js`): a price is a pure function of the player's market seed, the asset and the minute: layered smooth noise at time scales from 30 minutes to 2 weeks, a market-wide factor for stocks, and decaying news shocks. Nothing is stored or ticked, so history for charts and order checks is computed on demand and reloading can't change a price. The noise is mean-reverting: prices wander around a base value instead of inflating.
+
+Money rules (`js/bank.js`): rounding always goes against the player, buying and selling cross a spread (1–2% for currencies, 0.4% for stocks), so no round trip creates money. The bank's clock never goes backwards, so winding the device clock back can't replay an old price. Every game transfer carries a `txId`; the bank applies each one once, so a game that lost the answer retries safely. Portal Codes never carry currency.
 
 ## Character card (v1)
 

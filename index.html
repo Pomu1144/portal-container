@@ -4,58 +4,142 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Portal</title>
-  <meta name="description" content="One home for your games. Carry up to five characters from one game into another." />
-  <meta name="theme-color" content="#14110f" />
+  <meta name="description" content="One home for your games: carry characters between them, trade currencies, and invest on the Portal Exchange." />
+  <meta name="theme-color" content="#0b0a09" />
+  <link rel="icon" href="assets/brand/portal-mark.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho+B1:wght@600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/hub.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span class="brand-kanji" aria-hidden="true">門</span><span class="brand-name">Portal</span></div>
-    <div class="wallet" id="wallet" aria-label="Portal wallet">
-      <span class="coin coin-coins" title="Coins"><i aria-hidden="true">◎</i><b id="wallet-coins">0</b></span>
-      <span class="coin coin-premium" title="Premium"><i aria-hidden="true">◆</i><b id="wallet-premium">0</b></span>
-    </div>
-    <button class="player" id="player-btn" type="button" aria-label="Change player name">
-      <span class="player-label">Player</span><span class="player-name" id="player-name">—</span>
-    </button>
-  </header>
+  <div class="backdrop" aria-hidden="true"></div>
 
-  <main class="hub">
-    <section class="block" aria-labelledby="games-h">
-      <div class="block-head">
-        <h2 id="games-h">Games</h2>
-        <p class="hint">Pick a game, choose up to 5 characters to bring, and step through.</p>
-      </div>
-      <div class="games" id="games"></div>
-    </section>
+  <div class="app">
+    <aside class="rail" aria-label="Portal">
+      <a class="brand" href="#play">
+        <span class="brand-mark"><img src="assets/brand/portal-mark.png" alt="" onerror="this.remove()"><i>門</i></span>
+        <span class="brand-word">Portal</span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Sections">
+        <a href="#play" data-route="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM9 8.5v7l6-3.5z"/></svg><span>Play</span></a>
+        <a href="#vault" data-route="vault"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v13H4zM8 6V4h8v2M9 12.5h6"/></svg><span>Vault</span></a>
+        <a href="#exchange" data-route="exchange"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h13l-3-3M19 16H6l3 3"/></svg><span>Exchange</span></a>
+        <a href="#markets" data-route="markets"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></svg><span>Markets</span></a>
+        <a href="#activity" data-route="activity"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/></svg><span>Activity</span></a>
+      </nav>
+      <button class="player" id="player-btn" type="button" aria-label="Change player name">
+        <span class="player-avatar" id="player-avatar">?</span>
+        <span class="player-text"><small>Player</small><b id="player-name">Set name</b></span>
+      </button>
+    </aside>
 
-    <section class="block" aria-labelledby="vault-h">
-      <div class="block-head">
-        <h2 id="vault-h">Vault <span class="count" id="vault-count">0</span></h2>
-        <div class="block-tools">
-          <button class="btn" id="paste-code-btn" type="button">Paste Portal Code</button>
+    <div class="main">
+      <header class="top">
+        <h1 class="top-title" id="top-title">Play</h1>
+        <div class="top-stats">
+          <div class="stat"><small>Net worth</small><b id="net-worth">◈0.00</b></div>
+          <div class="stat"><small>Credits</small><b id="credits">◈0.00</b></div>
         </div>
-      </div>
-      <div class="filters" id="filters" role="radiogroup" aria-label="Filter vault by game"></div>
-      <div class="vault" id="vault"></div>
-      <p class="empty" id="vault-empty" hidden>
-        Your vault is empty. Open a game, go to <b>Settings → Portal</b> and send characters here,
-        or paste a Portal Code.
-      </p>
-    </section>
+      </header>
 
-    <section class="block" aria-labelledby="ledger-h">
-      <div class="block-head">
-        <h2 id="ledger-h">Wallet</h2>
-        <p class="hint">Coins go to coins and premium to premium. Send from one game's <b>Settings → Portal</b>, receive in another.</p>
-      </div>
-      <ol class="ledger" id="ledger"></ol>
-      <p class="empty" id="ledger-empty">No transfers yet.</p>
-    </section>
-  </main>
+      <main class="view">
+        <!-- PLAY -->
+        <section class="page" id="page-play" data-title="Play" hidden>
+          <div class="hero">
+            <div class="hero-text">
+              <p class="eyebrow">Your games</p>
+              <h2>Choose a world. Bring five.</h2>
+              <p class="lede">Characters travel as copies, progress comes home with them, and every coin you earn can be traded on the Portal Exchange.</p>
+            </div>
+          </div>
+          <div class="games" id="games"></div>
+        </section>
+
+        <!-- VAULT -->
+        <section class="page" id="page-vault" data-title="Vault" hidden>
+          <div class="toolbar">
+            <div class="seg" id="filters" role="radiogroup" aria-label="Filter by game"></div>
+            <button class="btn" id="paste-code-btn" type="button">Paste Portal Code</button>
+          </div>
+          <div class="cards" id="vault"></div>
+          <div class="empty" id="vault-empty" hidden>
+            <img src="assets/ui/empty-vault.webp" alt="" onerror="this.remove()">
+            <h3>Your vault is empty</h3>
+            <p>Open a game, go to <b>Settings → Portal</b>, and send characters here, or paste a Portal Code.</p>
+          </div>
+        </section>
+
+        <!-- EXCHANGE -->
+        <section class="page" id="page-exchange" data-title="Exchange" hidden>
+          <div class="grid-2">
+            <div class="panel">
+              <div class="panel-head"><h3>Currencies</h3><small>Price in Portal Credits · 24h</small></div>
+              <div class="table" id="fx-table" role="table" aria-label="Currencies"></div>
+            </div>
+            <div class="panel" id="convert-panel">
+              <div class="panel-head"><h3>Convert</h3><small id="convert-sub">Rates move every minute</small></div>
+              <form class="form" id="convert-form" autocomplete="off">
+                <label class="field"><span>From</span>
+                  <div class="field-row"><select id="cv-from"></select><input id="cv-qty" type="number" inputmode="numeric" min="1" step="1" placeholder="0"><button type="button" class="chip" id="cv-max">Max</button></div>
+                  <small class="field-hint" id="cv-have"></small>
+                </label>
+                <button type="button" class="swap" id="cv-swap" aria-label="Swap currencies"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v16l-3-3M16 20V4l3 3"/></svg></button>
+                <label class="field"><span>To</span>
+                  <div class="field-row"><select id="cv-to"></select></div>
+                </label>
+                <dl class="quote" id="cv-quote"></dl>
+                <button class="btn is-primary is-block" id="cv-go" type="submit">Convert</button>
+                <p class="form-msg" id="cv-msg" role="status" aria-live="polite"></p>
+              </form>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="panel">
+            <div class="panel-head">
+              <h3 id="pair-title">Rate</h3>
+              <div class="seg seg-sm" id="pair-range" role="radiogroup" aria-label="Range"></div>
+            </div>
+            <div class="pair-stats" id="pair-stats"></div>
+            <div class="chart-host" id="pair-chart"></div>
+            <p class="note">Plan a transfer: watch the rate, or set a target below and it fills automatically while you're away.</p>
+          </div>
+            <div class="panel" id="fx-order-panel"></div>
+          </div>
+        </section>
+
+        <!-- MARKETS -->
+        <section class="page" id="page-markets" data-title="Markets" hidden>
+          <div class="ticker" id="ticker" aria-label="Market news"></div>
+          <div class="grid-2 grid-markets">
+            <div class="panel">
+              <div class="panel-head"><h3>Stocks</h3><small>Price in Portal Credits · 24h</small></div>
+              <div class="table" id="stock-table" role="table" aria-label="Stocks"></div>
+            </div>
+            <div class="panel" id="stock-detail"></div>
+          </div>
+        </section>
+
+        <!-- ACTIVITY -->
+        <section class="page" id="page-activity" data-title="Activity" hidden>
+          <div class="grid-2">
+            <div class="panel">
+              <div class="panel-head"><h3>Holdings</h3><small>Valued at the bid</small></div>
+              <div class="table" id="holdings-table" role="table" aria-label="Holdings"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h3>Orders</h3><small>Targets fill at your price</small></div>
+              <div class="table" id="orders-table" role="table" aria-label="Orders"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>History</h3><small>Transfers, trades and orders</small></div>
+            <ol class="ledger" id="ledger"></ol>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
 
   <!-- Party picker -->
   <dialog class="sheet" id="party-dialog" aria-labelledby="party-title">
@@ -63,12 +147,12 @@
       <header class="sheet-head">
         <div>
           <h3 id="party-title">Choose your party</h3>
-          <p class="hint" id="party-sub">Up to 5 characters travel with you. They're copies — they stay in your vault.</p>
+          <p class="muted" id="party-sub">Up to 5 characters travel with you.</p>
         </div>
-        <span class="party-count" id="party-count">0 / 5</span>
+        <span class="count-badge" id="party-count">0 / 5</span>
       </header>
-      <div class="vault vault-pick" id="party-grid"></div>
-      <p class="empty" id="party-empty" hidden>No characters in the vault yet. You can still enter and send some back from the game.</p>
+      <div class="cards cards-pick" id="party-grid"></div>
+      <p class="muted center" id="party-empty" hidden>No characters in the vault yet. You can still enter and send some back from the game.</p>
       <footer class="sheet-foot">
         <button class="btn" value="cancel" type="submit">Cancel</button>
         <button class="btn is-primary" id="party-go" type="button">Enter</button>
@@ -80,9 +164,9 @@
   <dialog class="sheet sheet-small" id="code-dialog" aria-labelledby="code-title">
     <form method="dialog" class="sheet-inner">
       <h3 id="code-title">Paste Portal Code</h3>
-      <p class="hint">Codes start with <code>PRTL1.</code> and carry up to 5 characters.</p>
+      <p class="muted">Codes start with <code>PRTL1.</code> and carry up to 5 characters.</p>
       <textarea id="code-input" rows="4" spellcheck="false" autocomplete="off" placeholder="PRTL1.…"></textarea>
-      <p class="error" id="code-error" role="alert"></p>
+      <p class="form-msg is-error" id="code-error" role="alert"></p>
       <footer class="sheet-foot">
         <button class="btn" value="cancel" type="submit">Cancel</button>
         <button class="btn is-primary" id="code-go" type="button">Add to Vault</button>
@@ -93,7 +177,7 @@
   <!-- In-game view -->
   <section class="play" id="play" hidden aria-label="Game">
     <div class="play-bar">
-      <button class="btn btn-back" id="leave-btn" type="button">‹ Portal</button>
+      <button class="btn btn-sm" id="leave-btn" type="button">‹ Portal</button>
       <span class="play-title" id="play-title"></span>
       <span class="play-party" id="play-party" aria-label="Party"></span>
       <span class="play-status" id="play-status">Connecting…</span>
@@ -104,8 +188,11 @@
   <div class="toasts" id="toasts" aria-live="polite"></div>
 
   <script src="sdk/portal-sdk.js"></script>
+  <script src="js/market.js"></script>
+  <script src="js/bank.js"></script>
   <script src="js/vault.js"></script>
   <script src="js/bridge.js"></script>
+  <script src="js/charts.js"></script>
   <script src="js/hub.js"></script>
 </body>
 </html>

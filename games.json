@@ -8,13 +8,23 @@
     "franchise": "naruto",
     "maxParty": 5,
     "accent": "#f3b21c",
-    "rates": {
-      "coins": 1,
-      "premium": 1
-    },
     "currencies": {
-      "coins": "Ryo",
-      "premium": "Ninja Pearls"
+      "coins": {
+        "name": "Ryo",
+        "short": "Ryo",
+        "base": 0.012,
+        "vol": 0.08,
+        "spread": 0.01,
+        "glyph": "両"
+      },
+      "premium": {
+        "name": "Ninja Pearls",
+        "short": "Pearls",
+        "base": 1.2,
+        "vol": 0.12,
+        "spread": 0.02,
+        "glyph": "珠"
+      }
     }
   },
   {
@@ -26,9 +36,23 @@
     "franchise": "jjk",
     "maxParty": 5,
     "accent": "#7c5cff",
-    "rates": {
-      "coins": 1,
-      "premium": 1
+    "currencies": {
+      "coins": {
+        "name": "Yen",
+        "short": "Yen",
+        "base": 0.01,
+        "vol": 0.08,
+        "spread": 0.01,
+        "glyph": "¥"
+      },
+      "premium": {
+        "name": "Cursed Cubes",
+        "short": "Cubes",
+        "base": 1.0,
+        "vol": 0.12,
+        "spread": 0.02,
+        "glyph": "立"
+      }
     }
   }
 ]
