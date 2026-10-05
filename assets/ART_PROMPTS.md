@@ -31,8 +31,8 @@ All 1024×1024 with a transparent background, front-facing, centered, one object
 | 5 | `currency/credits.png` | A premium gold coin for "Portal Credits": thick polished gold with a black lacquer inlay of a diamond-in-a-ring symbol, subtle engraved rim. |
 | 6 | `currency/nxbnvnb-coins.png` | An old Japanese oval gold coin (koban style) for a ninja world's money, "Ryo": warm gold, worn edges, a leaf-shaped stamp. No readable text. |
 | 7 | `currency/nxbnvnb-premium.png` | A glowing violet-white pearl resting in a small gold setting, soft inner light: the ninja world's premium currency. |
-| 8 | `currency/jjk-net0-coins.png` | A modern silver-gold coin for a contemporary sorcery world's money, "Yen": clean minted look with a small talisman engraving. No readable text. |
-| 9 | `currency/jjk-net0-premium.png` | A small floating cube of dark violet crystal with faint cursed-energy smoke and gold edges: a sorcery world's premium currency. |
+| 8 | `currency/jjk-net0-coins.png` | **Done:** JP icon from the game's own art (JJK-net0 `assets/pp/currency/jp.webp`). |
+| 9 | `currency/jjk-net0-premium.png` | **Done:** Cubes icon from the game's own art (JJK-net0 `assets/pp/currency/cubes.webp`). |
 
 ## Stock logos (12)
 

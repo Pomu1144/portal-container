@@ -43,12 +43,12 @@ Each game's two currencies are held at the Portal as their own assets:
 
 | Asset | NXBNVNB | JJK-net0 |
 |---|---|---|
-| `<game>:coins` | Ryo | Yen |
-| `<game>:premium` | Ninja Pearls | Cursed Cubes |
+| `<game>:coins` | Ryo | JP |
+| `<game>:premium` | Ninja Pearls | Cubes |
 
 A game deposits and withdraws only its own two currencies (`deposit` / `withdraw` in the SDK). Moving value between games happens on the hub's **Exchange**, priced in **Portal Credits (◈)**:
 
-- **Floating exchange rates.** Every currency has a price in credits that moves minute by minute, so 1 Ryo might buy 1.14 Yen today and 1.26 next week. **Convert** swaps any currency for another (or for credits) in one step.
+- **Floating exchange rates.** Every currency has a price in credits that moves minute by minute, so 1 Ryo might buy 1.14 JP today and 1.26 next week. **Convert** swaps any currency for another (or for credits) in one step.
 - **Stock market.** Twelve fictional companies from both worlds (`data/stocks.json`) with their own volatility, a shared market factor and occasional news events that move prices. Buy shares with credits, sell them later, convert the credits into whatever currency a game needs.
 - **Target orders.** Buy or sell at a price you choose. The cost (or the shares) is set aside, the order fills automatically if the price reaches the target, even while the hub is closed, and expires after 7 days returning what was set aside.
 - **Activity** lists holdings with profit/loss, open and closed orders, and every transfer, trade and order.

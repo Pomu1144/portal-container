@@ -3,7 +3,7 @@
  * ---------------------------------------------------------------------------
  * Units
  *   credits          Portal Credits, stored as whole cents (◈1.00 = 100)
- *   <game>:coins     a game's soft currency (Ryo, Yen, …), whole units
+ *   <game>:coins     a game's soft currency (Ryo, JP, …), whole units
  *   <game>:premium   a game's premium currency (Pearls, Cubes, …), whole units
  *   stock:<SYM>      whole shares
  *

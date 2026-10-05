@@ -38,17 +38,17 @@
     "accent": "#7c5cff",
     "currencies": {
       "coins": {
-        "name": "Yen",
-        "short": "Yen",
+        "name": "JP",
+        "short": "JP",
         "base": 0.01,
         "vol": 0.08,
         "spread": 0.01,
-        "glyph": "¥"
+        "glyph": "呪"
       },
       "premium": {
-        "name": "Cursed Cubes",
+        "name": "Cubes",
         "short": "Cubes",
-        "base": 1.0,
+        "base": 0.0167,
         "vol": 0.12,
         "spread": 0.02,
         "glyph": "立"
