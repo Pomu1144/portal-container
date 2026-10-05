@@ -7,7 +7,15 @@
     "url": "../NXBNVNB/index.html",
     "franchise": "naruto",
     "maxParty": 5,
-    "accent": "#f3b21c"
+    "accent": "#f3b21c",
+    "rates": {
+      "coins": 1,
+      "premium": 1
+    },
+    "currencies": {
+      "coins": "Ryo",
+      "premium": "Ninja Pearls"
+    }
   },
   {
     "id": "jjk-net0",
@@ -17,6 +25,10 @@
     "url": "../JJK-net0/index.html",
     "franchise": "jjk",
     "maxParty": 5,
-    "accent": "#7c5cff"
+    "accent": "#7c5cff",
+    "rates": {
+      "coins": 1,
+      "premium": 1
+    }
   }
 ]

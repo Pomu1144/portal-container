@@ -66,6 +66,31 @@ h2, h3 { font-family: "Noto Serif JP", serif; margin: 0; }
 .player-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 .player-name { font-weight: 700; }
 
+/* ---------- wallet ---------- */
+.topbar { gap: 12px; }
+.wallet { display: flex; gap: 6px; margin-left: auto; }
+.coin {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px 3px 6px; border-radius: 99px;
+  background: var(--panel); border: 1px solid var(--line); font: 700 13px Inter, sans-serif; white-space: nowrap;
+}
+.coin i { font-style: normal; }
+.coin-coins i, .ledger-amt.coin-coins { color: var(--gold); }
+.coin-premium i, .ledger-amt.coin-premium { color: #9b7cff; }
+.ledger { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ledger li {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center;
+  padding: 8px 12px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-size: 14px;
+}
+.ledger li.is-refused { opacity: .55; }
+.ledger-amt { font-weight: 800; min-width: 84px; font-variant-numeric: tabular-nums; }
+.ledger-what { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ledger time { color: var(--muted); font-size: 12px; white-space: nowrap; }
+@media (max-width: 520px) {
+  .ledger li { grid-template-columns: auto 1fr; }
+  .ledger time { display: none; }
+  .player-label { display: none; }
+}
+
 /* ---------- layout ---------- */
 .hub { max-width: 1100px; margin: 0 auto; padding: 16px; display: grid; gap: 28px; }
 .block-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 16px; margin-bottom: 12px; }

@@ -14,6 +14,10 @@
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-kanji" aria-hidden="true">門</span><span class="brand-name">Portal</span></div>
+    <div class="wallet" id="wallet" aria-label="Portal wallet">
+      <span class="coin coin-coins" title="Coins"><i aria-hidden="true">◎</i><b id="wallet-coins">0</b></span>
+      <span class="coin coin-premium" title="Premium"><i aria-hidden="true">◆</i><b id="wallet-premium">0</b></span>
+    </div>
     <button class="player" id="player-btn" type="button" aria-label="Change player name">
       <span class="player-label">Player</span><span class="player-name" id="player-name">—</span>
     </button>
@@ -41,6 +45,15 @@
         Your vault is empty. Open a game, go to <b>Settings → Portal</b> and send characters here,
         or paste a Portal Code.
       </p>
+    </section>
+
+    <section class="block" aria-labelledby="ledger-h">
+      <div class="block-head">
+        <h2 id="ledger-h">Wallet</h2>
+        <p class="hint">Coins go to coins and premium to premium. Send from one game's <b>Settings → Portal</b>, receive in another.</p>
+      </div>
+      <ol class="ledger" id="ledger"></ol>
+      <p class="empty" id="ledger-empty">No transfers yet.</p>
     </section>
   </main>
 

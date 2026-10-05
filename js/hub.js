@@ -49,6 +49,32 @@
       </${o.tag || 'div'}>`;
   }
 
+  /* ---------- wallet ---------- */
+
+  const fmt = (n) => Number(n || 0).toLocaleString();
+  const currencyName = (gameId, c) => {
+    const g = games.find((x) => x.id === gameId);
+    return (g && g.currencies && g.currencies[c]) || (c === 'premium' ? 'premium' : 'coins');
+  };
+
+  function renderWallet() {
+    const w = Vault.wallet();
+    $('wallet-coins').textContent = fmt(w.coins);
+    $('wallet-premium').textContent = fmt(w.premium);
+    const list = Vault.ledger().slice(0, 12);
+    $('ledger-empty').hidden = list.length > 0;
+    $('ledger').innerHTML = list.map((t) => {
+      const sign = t.type === 'deposit' ? '+' : '−';
+      const verb = t.type === 'deposit' ? 'from' : 'to';
+      const when = new Date(t.at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      return `<li class="${t.ok ? '' : 'is-refused'}">
+        <span class="ledger-amt coin-${esc(t.currency)}">${t.ok ? sign : ''}${fmt(t.units)} ${t.currency === 'premium' ? '◆' : '◎'}</span>
+        <span class="ledger-what">${esc(fmt(t.amount))} ${esc(currencyName(t.gameId, t.currency))} ${verb} ${esc(gameName(t.gameId))}${t.ok ? '' : ' · refused'}</span>
+        <time>${esc(when)}</time>
+      </li>`;
+    }).join('');
+  }
+
   /* ---------- player ---------- */
 
   function renderPlayer() {
@@ -182,6 +208,8 @@
       if (type === 'connected') { $('play-status').textContent = 'Connected'; $('play-status').classList.add('is-on'); }
       else if (type === 'grant') toast(card.name + ' added to the vault');
       else if (type === 'update') toast(card.name + ' is now Lv ' + card.level);
+      else if (type === 'deposit') toast('+' + fmt(card.units) + ' ' + card.currency + ' to the wallet');
+      else if (type === 'withdraw') toast('−' + fmt(card.units) + ' ' + card.currency + ' to ' + game.name);
       else if (type === 'exit') leave();
     });
   }
@@ -197,11 +225,11 @@
 
   /* ---------- boot ---------- */
 
-  Vault.onChange(() => { renderVault(); renderPlayer(); });
+  Vault.onChange(() => { renderVault(); renderPlayer(); renderWallet(); });
 
   fetch('games.json')
     .then((r) => r.json())
     .then((list) => { games = Array.isArray(list) ? list : []; })
     .catch(() => { games = []; toast('Could not load the game list'); })
-    .finally(() => { renderGames(); renderVault(); renderPlayer(); });
+    .finally(() => { renderGames(); renderVault(); renderPlayer(); renderWallet(); });
 })();

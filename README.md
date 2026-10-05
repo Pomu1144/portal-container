@@ -26,9 +26,24 @@ Each game stays its own repo and site. The hub opens a game in an iframe and the
 2. The game turns each card into its own unit with an **adapter**: a card from its own game adds that unit; a card from another game becomes a playable *guest*.
 3. The game may `update` a party card (level/rarity only go up) or `grant` one of **its own** characters into the vault.
 
+4. The game may `deposit` currency into the Portal wallet or `withdraw` from it.
+
 The hub only reads messages from the open game's iframe and origin, rejects updates for cards outside the party, and refuses grants of characters a game does not own.
 
 Without the hub, characters can still travel as a **Portal Code** (`PRTL1.…`, up to 5 cards): copy it from one game's *Settings → Portal* and paste it into another game or into the hub.
+
+## Currency
+
+The hub keeps one wallet with two currencies. Each game maps its own money onto them:
+
+| Portal | NXBNVNB | JJK-net0 |
+|---|---|---|
+| `coins` ◎ | Ryo | the game's soft currency |
+| `premium` ◆ | Ninja Pearls | the game's premium currency |
+
+Coins only go to coins and premium only to premium. `games.json` sets each game's `rates` (game units per Portal unit, default 1 : 1), and conversion always rounds against the player. Money only moves while a game runs inside the hub; Portal Codes never carry currency, since a code can be pasted twice.
+
+Every transfer has a `txId`. The hub records it in a ledger and applies each id once, so a game that lost the hub's answer can safely retry with the same id. Games save a transfer as pending before sending it and retry pending transfers on the next connect. The hub page lists recent transfers under **Wallet**.
 
 ## Character card (v1)
 
